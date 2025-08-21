@@ -1,7 +1,7 @@
 # Netlify configuration for Angular app
 [build]
   base = "frontend"
-  command = "npm ci && npm run build"
+  command = "chmod +x netlify-build.sh && ./netlify-build.sh"
   publish = "dist/automated-invoice-generator"
 
 # Redirect all routes to index.html for Angular routing
