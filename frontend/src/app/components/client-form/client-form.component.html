@@ -1,0 +1,154 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">{{ isEditing ? 'Edit Client' : 'Add New Client' }}</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="name" class="form-label">Company Name *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="name" 
+                formControlName="name"
+                [class.is-invalid]="isFieldInvalid('name')"
+                placeholder="Enter company name">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('name')">
+                Company name is required.
+              </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="contactPerson" class="form-label">Contact Person</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="contactPerson" 
+                formControlName="contactPerson"
+                placeholder="Enter contact person name">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">Email *</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                formControlName="email"
+                [class.is-invalid]="isFieldInvalid('email')"
+                placeholder="Enter email address">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+                <span *ngIf="clientForm.get('email')?.errors?.['required']">Email is required.</span>
+                <span *ngIf="clientForm.get('email')?.errors?.['email']">Please enter a valid email address.</span>
+              </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                id="phone" 
+                formControlName="phone"
+                placeholder="Enter phone number">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="address" class="form-label">Address *</label>
+            <textarea 
+              class="form-control" 
+              id="address" 
+              formControlName="address"
+              [class.is-invalid]="isFieldInvalid('address')"
+              rows="3"
+              placeholder="Enter complete address"></textarea>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('address')">
+              Address is required.
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="city" class="form-label">City</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="city" 
+                formControlName="city"
+                placeholder="Enter city">
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <label for="state" class="form-label">State</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="state" 
+                formControlName="state"
+                placeholder="Enter state">
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <label for="postalCode" class="form-label">Postal Code</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="postalCode" 
+                formControlName="postalCode"
+                placeholder="Enter postal code">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="country" 
+              formControlName="country"
+              placeholder="Enter country">
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="clientForm.invalid || isSubmitting">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              {{ isEditing ? 'Update Client' : 'Create Client' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Client Information</h5>
+      </div>
+      <div class="card-body">
+        <p class="text-muted">
+          Fill in the client details to create a new client profile. Required fields are marked with an asterisk (*).
+        </p>
+        
+        <div class="alert alert-info" role="alert">
+          <h6 class="alert-heading">Tips:</h6>
+          <ul class="mb-0">
+            <li>Use the company's official name</li>
+            <li>Provide accurate contact information</li>
+            <li>Complete address helps with invoice delivery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

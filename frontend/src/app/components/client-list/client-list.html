@@ -1,0 +1,104 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Clients</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button type="button" class="btn btn-primary" routerLink="/clients/new">
+        <i class="fas fa-plus"></i> Add New Client
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-search"></i>
+          </span>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Search clients..."
+            [(ngModel)]="searchTerm"
+            (input)="filterClients()">
+        </div>
+      </div>
+      <div class="col-md-6 text-end">
+        <span class="text-muted">{{ filteredClients.length }} client(s) found</span>
+      </div>
+    </div>
+
+    <div class="table-responsive" *ngIf="filteredClients.length > 0; else noClients">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Contact Person</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let client of filteredClients">
+            <td>
+              <strong>{{ client.name }}</strong>
+            </td>
+            <td>{{ client.contactPerson || '-' }}</td>
+            <td>
+              <a [href]="'mailto:' + client.email">{{ client.email }}</a>
+            </td>
+            <td>
+              <a *ngIf="client.phone" [href]="'tel:' + client.phone">{{ client.phone }}</a>
+              <span *ngIf="!client.phone">-</span>
+            </td>
+            <td>{{ client.city || '-' }}</td>
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <button 
+                  type="button" 
+                  class="btn btn-outline-primary"
+                  [routerLink]="['/clients', client.id, 'edit']"
+                  title="Edit Client">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-success"
+                  [routerLink]="['/invoices/new']"
+                  [queryParams]="{clientId: client.id}"
+                  title="Create Invoice">
+                  <i class="fas fa-file-invoice"></i>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-danger"
+                  (click)="deleteClient(client)"
+                  title="Delete Client">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noClients>
+      <div class="text-center py-5">
+        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">No clients found</h4>
+        <p class="text-muted">
+          <span *ngIf="searchTerm">No clients match your search criteria.</span>
+          <span *ngIf="!searchTerm">You haven't added any clients yet.</span>
+        </p>
+        <button type="button" class="btn btn-primary" routerLink="/clients/new">
+          <i class="fas fa-plus"></i> Add Your First Client
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>

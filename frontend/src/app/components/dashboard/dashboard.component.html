@@ -1,0 +1,129 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Dashboard</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-3 mb-4">
+    <div class="card bg-primary text-white">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h4 class="card-title">{{ totalClients }}</h4>
+            <p class="card-text">Total Clients</p>
+          </div>
+          <div class="align-self-center">
+            <i class="fas fa-users fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-3 mb-4">
+    <div class="card bg-success text-white">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h4 class="card-title">{{ totalInvoices }}</h4>
+            <p class="card-text">Total Invoices</p>
+          </div>
+          <div class="align-self-center">
+            <i class="fas fa-file-invoice fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-3 mb-4">
+    <div class="card bg-warning text-white">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h4 class="card-title">{{ pendingInvoices }}</h4>
+            <p class="card-text">Pending Invoices</p>
+          </div>
+          <div class="align-self-center">
+            <i class="fas fa-clock fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-3 mb-4">
+    <div class="card bg-info text-white">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h4 class="card-title">${{ totalRevenue | number:'1.2-2' }}</h4>
+            <p class="card-text">Total Revenue</p>
+          </div>
+          <div class="align-self-center">
+            <i class="fas fa-dollar-sign fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Recent Invoices</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Client</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let invoice of recentInvoices">
+                <td>{{ invoice.invoiceNumber }}</td>
+                <td>{{ invoice.client?.name }}</td>
+                <td>${{ invoice.total | number:'1.2-2' }}</td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusBadgeClass(invoice.paymentStatus || '')">
+                    {{ invoice.paymentStatus }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Quick Actions</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary" routerLink="/clients/new">
+            <i class="fas fa-user-plus"></i> Add New Client
+          </button>
+          <button class="btn btn-success" routerLink="/invoices/new">
+            <i class="fas fa-plus"></i> Create Invoice
+          </button>
+          <button class="btn btn-info" routerLink="/clients">
+            <i class="fas fa-users"></i> View All Clients
+          </button>
+          <button class="btn btn-secondary" routerLink="/invoices">
+            <i class="fas fa-file-invoice"></i> View All Invoices
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

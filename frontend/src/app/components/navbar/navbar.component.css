@@ -1,0 +1,7 @@
+.navbar-brand i {
+  margin-right: 0.5rem;
+}
+
+.nav-link.active {
+  font-weight: bold;
+}

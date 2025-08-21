@@ -1,0 +1,133 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Invoices</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button type="button" class="btn btn-primary" routerLink="/invoices/new">
+        <i class="fas fa-plus"></i> Create Invoice
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-search"></i>
+          </span>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Search invoices..."
+            [(ngModel)]="searchTerm"
+            (input)="filterInvoices()">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="statusFilter" (change)="filterInvoices()">
+          <option value="">All Statuses</option>
+          <option value="PENDING">Pending</option>
+          <option value="PAID">Paid</option>
+          <option value="OVERDUE">Overdue</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+      </div>
+      <div class="col-md-5 text-end">
+        <span class="text-muted">{{ filteredInvoices.length }} invoice(s) found</span>
+      </div>
+    </div>
+
+    <div class="table-responsive" *ngIf="filteredInvoices.length > 0; else noInvoices">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Invoice #</th>
+            <th>Client</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let invoice of filteredInvoices">
+            <td>
+              <strong>{{ invoice.invoiceNumber || 'INV-' + invoice.id }}</strong>
+            </td>
+            <td>{{ invoice.client?.name }}</td>
+            <td>{{ invoice.invoiceDate | date:'mediumDate' }}</td>
+            <td>
+              <span [class]="getDueDateClass(invoice.dueDate, invoice.paymentStatus)">
+                {{ invoice.dueDate | date:'mediumDate' }}
+              </span>
+            </td>
+            <td>
+              <strong>${{ invoice.total | number:'1.2-2' }}</strong>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="getStatusBadgeClass(invoice.paymentStatus || 'PENDING')">
+                {{ invoice.paymentStatus }}
+              </span>
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <button 
+                  type="button" 
+                  class="btn btn-outline-info"
+                  [routerLink]="['/invoices', invoice.id, 'view']"
+                  title="View Invoice">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-primary"
+                  [routerLink]="['/invoices', invoice.id, 'edit']"
+                  title="Edit Invoice">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-success"
+                  (click)="downloadPDF(invoice)"
+                  title="Download PDF">
+                  <i class="fas fa-file-pdf"></i>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-warning"
+                  (click)="sendEmail(invoice)"
+                  title="Send Email">
+                  <i class="fas fa-envelope"></i>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-danger"
+                  (click)="deleteInvoice(invoice)"
+                  title="Delete Invoice">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noInvoices>
+      <div class="text-center py-5">
+        <i class="fas fa-file-invoice fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">No invoices found</h4>
+        <p class="text-muted">
+          <span *ngIf="searchTerm || statusFilter">No invoices match your search criteria.</span>
+          <span *ngIf="!searchTerm && !statusFilter">You haven't created any invoices yet.</span>
+        </p>
+        <button type="button" class="btn btn-primary" routerLink="/invoices/new">
+          <i class="fas fa-plus"></i> Create Your First Invoice
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>
