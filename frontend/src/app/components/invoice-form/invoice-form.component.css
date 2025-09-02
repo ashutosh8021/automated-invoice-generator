@@ -1,0 +1,25 @@
+.suggestion-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.suggestion-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none !important;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Ensure autocomplete dropdown appears above other elements */
+.suggestion-dropdown {
+  z-index: 1050;
+}

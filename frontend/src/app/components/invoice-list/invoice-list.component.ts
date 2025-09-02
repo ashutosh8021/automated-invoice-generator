@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../../services/invoice.service';
+import { PdfService } from '../../services/pdf.service';
 import { Invoice, PaymentStatus } from '../../models/invoice.model';
 
 @Component({
@@ -13,7 +14,10 @@ export class InvoiceListComponent implements OnInit {
   searchTerm: string = '';
   statusFilter: string = '';
 
-  constructor(private invoiceService: InvoiceService) { }
+  constructor(
+    private invoiceService: InvoiceService,
+    private pdfService: PdfService
+  ) { }
 
   ngOnInit(): void {
     this.loadInvoices();
@@ -39,15 +43,17 @@ export class InvoiceListComponent implements OnInit {
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
       filtered = filtered.filter(invoice =>
-        (invoice.invoiceNumber && invoice.invoiceNumber.toLowerCase().includes(term)) ||
-        (invoice.client?.name && invoice.client.name.toLowerCase().includes(term)) ||
+        (invoice.invoice_number && invoice.invoice_number.toLowerCase().includes(term)) ||
+        (invoice.customer_name && invoice.customer_name.toLowerCase().includes(term)) ||
+        (invoice.customer_email && invoice.customer_email.toLowerCase().includes(term)) ||
+        (invoice.customer_phone && invoice.customer_phone.toLowerCase().includes(term)) ||
         (invoice.id && invoice.id.toString().includes(term))
       );
     }
 
     // Filter by status
     if (this.statusFilter) {
-      filtered = filtered.filter(invoice => invoice.paymentStatus === this.statusFilter);
+      filtered = filtered.filter(invoice => invoice.payment_status === this.statusFilter);
     }
 
     this.filteredInvoices = filtered;
@@ -81,30 +87,20 @@ export class InvoiceListComponent implements OnInit {
     return '';
   }
 
-  downloadPDF(invoice: Invoice): void {
-    if (invoice.id) {
-      this.invoiceService.downloadInvoicePdf(invoice.id).subscribe({
-        next: (blob: Blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `invoice-${invoice.invoiceNumber || invoice.id}.pdf`;
-          link.click();
-          window.URL.revokeObjectURL(url);
-        },
-        error: (error: any) => {
-          console.error('Error downloading PDF:', error);
-          alert('Error generating PDF. Please try again.');
-        }
-      });
+  async downloadPDF(invoice: Invoice): Promise<void> {
+    try {
+      await this.pdfService.generateInvoicePDF(invoice);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      alert('Error generating PDF. Please try again.');
     }
   }
 
   sendEmail(invoice: Invoice): void {
     if (invoice.id) {
-      const confirmed = confirm(`Send invoice to ${invoice.client?.email}?`);
+      const confirmed = confirm(`Send invoice to ${invoice.customer_email}?`);
       if (confirmed) {
-        this.invoiceService.sendInvoiceEmail(invoice.id, invoice.client?.email).subscribe({
+        this.invoiceService.sendInvoiceEmail(invoice.id, invoice.customer_email).subscribe({
           next: () => {
             alert('Invoice sent successfully!');
           },
@@ -118,7 +114,7 @@ export class InvoiceListComponent implements OnInit {
   }
 
   deleteInvoice(invoice: Invoice): void {
-    const confirmed = confirm(`Are you sure you want to delete invoice ${invoice.invoiceNumber || invoice.id}? This action cannot be undone.`);
+    const confirmed = confirm(`Are you sure you want to delete invoice ${invoice.invoice_number || invoice.id}? This action cannot be undone.`);
     if (confirmed && invoice.id) {
       this.invoiceService.deleteInvoice(invoice.id).subscribe({
         next: () => {

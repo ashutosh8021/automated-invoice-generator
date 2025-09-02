@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '../../services/invoice.service';
+import { PdfService } from '../../services/pdf.service';
 import { Invoice, PaymentStatus } from '../../models/invoice.model';
 
 @Component({
@@ -15,7 +16,8 @@ export class InvoiceViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private pdfService: PdfService
   ) { }
 
   ngOnInit(): void {
@@ -70,30 +72,22 @@ export class InvoiceViewComponent implements OnInit {
     return '';
   }
 
-  downloadPDF(): void {
-    if (this.invoice?.id) {
-      this.invoiceService.downloadInvoicePdf(this.invoice.id).subscribe({
-        next: (blob: Blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `invoice-${this.invoice?.invoiceNumber || this.invoice?.id}.pdf`;
-          link.click();
-          window.URL.revokeObjectURL(url);
-        },
-        error: (error: any) => {
-          console.error('Error downloading PDF:', error);
-          alert('Error generating PDF. Please try again.');
-        }
-      });
+  async downloadPDF(): Promise<void> {
+    if (this.invoice) {
+      try {
+        await this.pdfService.generateInvoicePDF(this.invoice);
+      } catch (error) {
+        console.error('Error downloading PDF:', error);
+        alert('Error generating PDF. Please try again.');
+      }
     }
   }
 
   sendEmail(): void {
-    if (this.invoice?.id && this.invoice?.client?.email) {
-      const confirmed = confirm(`Send invoice to ${this.invoice.client.email}?`);
+    if (this.invoice?.id && this.invoice?.customer_email) {
+      const confirmed = confirm(`Send invoice to ${this.invoice.customer_email}?`);
       if (confirmed) {
-        this.invoiceService.sendInvoiceEmail(this.invoice.id, this.invoice.client.email).subscribe({
+        this.invoiceService.sendInvoiceEmail(this.invoice.id, this.invoice.customer_email).subscribe({
           next: () => {
             alert('Invoice sent successfully!');
           },
@@ -144,7 +138,7 @@ export class InvoiceViewComponent implements OnInit {
 
   sendReminder(): void {
     if (this.invoice?.id) {
-      const confirmed = confirm(`Send payment reminder to ${this.invoice.client?.email}?`);
+      const confirmed = confirm(`Send payment reminder to ${this.invoice.customer_email || 'customer'}?`);
       if (confirmed) {
         this.invoiceService.sendPaymentReminder(this.invoice.id).subscribe({
           next: () => {

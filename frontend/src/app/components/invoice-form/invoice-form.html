@@ -13,59 +13,137 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="client" class="form-label">Client *</label>
-              <select 
-                class="form-select" 
-                id="client" 
-                formControlName="clientId"
-                [class.is-invalid]="isFieldInvalid('clientId')">
-                <option value="">Select a client...</option>
-                <option *ngFor="let client of clients" [value]="client.id">
-                  {{ client.name }}
-                </option>
-              </select>
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('clientId')">
-                Please select a client.
+              <label for="customer_name" class="form-label">Customer Name *</label>
+              <div class="position-relative">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="customer_name" 
+                  formControlName="customer_name"
+                  [class.is-invalid]="isFieldInvalid('customer_name')"
+                  (input)="onCustomerNameInput($event)"
+                  (keydown)="onCustomerNameKeyDown($event)"
+                  (blur)="hideSuggestions()"
+                  autocomplete="off">
+                
+                <!-- Customer suggestions dropdown -->
+                <div *ngIf="showSuggestions && customerSuggestions.length > 0" 
+                     class="position-absolute w-100 bg-white border border-top-0 rounded-bottom shadow-sm" 
+                     style="z-index: 1000; max-height: 200px; overflow-y: auto;">
+                  <div *ngFor="let suggestion of customerSuggestions; let i = index" 
+                       class="p-2 border-bottom cursor-pointer suggestion-item"
+                       [class.bg-light]="i === selectedSuggestionIndex"
+                       (mousedown)="selectCustomer(suggestion)"
+                       (mouseenter)="selectedSuggestionIndex = i">
+                    <div class="fw-bold">{{ suggestion.customer_name }}</div>
+                    <small class="text-muted">
+                      {{ suggestion.customer_phone }} 
+                      <span *ngIf="suggestion.customer_email"> • {{ suggestion.customer_email }}</span>
+                    </small>
+                  </div>
+                </div>
               </div>
-              <div class="form-text">
-                <a routerLink="/clients/new" target="_blank">+ Add new client</a>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('customer_name')">
+                Customer name is required.
               </div>
             </div>
-            
             <div class="col-md-6 mb-3">
-              <label for="invoiceNumber" class="form-label">Invoice Number</label>
+              <label for="customer_email" class="form-label">Customer Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="customer_email" 
+                formControlName="customer_email"
+                [class.is-invalid]="isFieldInvalid('customer_email')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('customer_email')">
+                Please enter a valid email address.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="customer_phone" class="form-label">Customer Phone</label>
               <input 
                 type="text" 
                 class="form-control" 
-                id="invoiceNumber" 
-                formControlName="invoiceNumber"
+                id="customer_phone" 
+                formControlName="customer_phone"
+                (input)="onCustomerPhoneInput($event)"
+                placeholder="Enter phone number for better suggestions">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="customer_address" class="form-label">Customer Address</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="customer_address" 
+                formControlName="customer_address">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="customer_city" class="form-label">City</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="customer_city" 
+                formControlName="customer_city">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="customer_state" class="form-label">State</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="customer_state" 
+                formControlName="customer_state">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="customer_postal_code" class="form-label">Postal Code</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="customer_postal_code" 
+                formControlName="customer_postal_code">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="customer_country" class="form-label">Country</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="customer_country" 
+                formControlName="customer_country">
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="invoice_number" class="form-label">Invoice Number</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="invoice_number" 
+                formControlName="invoice_number"
                 placeholder="Auto-generated if empty">
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="invoiceDate" class="form-label">Invoice Date *</label>
+              <label for="invoice_date" class="form-label">Invoice Date *</label>
               <input 
                 type="date" 
                 class="form-control" 
-                id="invoiceDate" 
-                formControlName="invoiceDate"
-                [class.is-invalid]="isFieldInvalid('invoiceDate')">
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('invoiceDate')">
+                id="invoice_date" 
+                formControlName="invoice_date"
+                [class.is-invalid]="isFieldInvalid('invoice_date')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('invoice_date')">
                 Invoice date is required.
               </div>
             </div>
             
             <div class="col-md-6 mb-3">
-              <label for="dueDate" class="form-label">Due Date *</label>
+              <label for="due_date" class="form-label">Due Date *</label>
               <input 
                 type="date" 
                 class="form-control" 
-                id="dueDate" 
-                formControlName="dueDate"
-                [class.is-invalid]="isFieldInvalid('dueDate')">
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('dueDate')">
+                id="due_date" 
+                formControlName="due_date"
+                [class.is-invalid]="isFieldInvalid('due_date')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('due_date')">
                 Due date is required.
               </div>
             </div>
@@ -176,12 +254,12 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
-            <label for="taxRate" class="form-label">Tax Rate (%)</label>
+            <label for="tax_rate" class="form-label">Tax Rate (%)</label>
             <input 
               type="number" 
               class="form-control" 
-              id="taxRate" 
-              formControlName="taxRate"
+              id="tax_rate" 
+              formControlName="tax_rate"
               min="0"
               max="100"
               step="0.01"
@@ -191,24 +269,24 @@
           <div class="border-top pt-3">
             <div class="d-flex justify-content-between mb-2">
               <span>Subtotal:</span>
-              <span class="fw-bold">${{ subtotal | number:'1.2-2' }}</span>
+              <span class="fw-bold">₹{{ subtotal | number:'1.2-2' }}</span>
             </div>
             
             <div class="d-flex justify-content-between mb-2">
-              <span>Tax ({{ invoiceForm.value.taxRate || 0 }}%):</span>
-              <span class="fw-bold">${{ taxAmount | number:'1.2-2' }}</span>
+              <span>Tax ({{ invoiceForm.value.tax_rate || 0 }}%):</span>
+              <span class="fw-bold">₹{{ taxAmount | number:'1.2-2' }}</span>
             </div>
             
             <div class="d-flex justify-content-between border-top pt-2">
               <span class="h5">Total:</span>
-              <span class="h5 text-primary">${{ total | number:'1.2-2' }}</span>
+              <span class="h5 text-primary">₹{{ total | number:'1.2-2' }}</span>
             </div>
           </div>
 
           <div class="mt-4">
             <div class="mb-3">
-              <label for="paymentStatus" class="form-label">Payment Status</label>
-              <select class="form-select" id="paymentStatus" formControlName="paymentStatus">
+              <label for="payment_status" class="form-label">Payment Status</label>
+              <select class="form-select" id="payment_status" formControlName="payment_status">
                 <option value="PENDING">Pending</option>
                 <option value="PAID">Paid</option>
                 <option value="OVERDUE">Overdue</option>
@@ -218,6 +296,14 @@
           </div>
 
           <div class="d-grid gap-2 mt-4">
+            <button 
+              type="button" 
+              class="btn btn-outline-primary" 
+              (click)="previewPDF()"
+              [disabled]="invoiceForm.invalid || getItemsControls().length === 0">
+              <i class="fas fa-file-pdf"></i> Preview PDF
+            </button>
+            
             <button 
               type="submit" 
               class="btn btn-success" 

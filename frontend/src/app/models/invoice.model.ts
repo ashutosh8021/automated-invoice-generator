@@ -10,20 +10,27 @@ export interface InvoiceItem {
 
 export interface Invoice {
   id?: number;
-  invoiceNumber?: string;
-  client: Client;
-  invoiceDate: Date;
-  dueDate: Date;
+  invoice_number?: string;
+  customer_name: string;
+  customer_email?: string;
+  customer_phone?: string;
+  customer_address?: string;
+  customer_city?: string;
+  customer_state?: string;
+  customer_postal_code?: string;
+  customer_country?: string;
+  invoice_date: Date;
+  due_date: Date;
   items: InvoiceItem[];
   subtotal?: number;
-  taxRate?: number;
-  taxAmount?: number;
+  tax_rate?: number;
+  tax_amount?: number;
   total?: number;
-  paymentStatus?: PaymentStatus;
+  payment_status?: PaymentStatus;
   notes?: string;
   terms?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export enum PaymentStatus {

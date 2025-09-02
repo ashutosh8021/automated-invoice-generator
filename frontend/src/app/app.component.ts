@@ -15,11 +15,6 @@ import { Component } from '@angular/core';
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="/clients" routerLinkActive="active">
-                  <i class="fas fa-users"></i> Clients
-                </a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" routerLink="/invoices" routerLinkActive="active">
                   <i class="fas fa-file-invoice"></i> Invoices
                 </a>

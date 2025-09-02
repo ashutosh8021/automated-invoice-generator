@@ -55,21 +55,21 @@
         <tbody>
           <tr *ngFor="let invoice of filteredInvoices">
             <td>
-              <strong>{{ invoice.invoiceNumber || 'INV-' + invoice.id }}</strong>
+              <strong>{{ invoice.invoice_number || 'INV-' + invoice.id }}</strong>
             </td>
-            <td>{{ invoice.client?.name }}</td>
-            <td>{{ invoice.invoiceDate | date:'mediumDate' }}</td>
+            <td>{{ invoice.customer_name }}</td>
+            <td>{{ invoice.invoice_date | date:'mediumDate' }}</td>
             <td>
-              <span [class]="getDueDateClass(invoice.dueDate, invoice.paymentStatus)">
-                {{ invoice.dueDate | date:'mediumDate' }}
+              <span [class]="getDueDateClass(invoice.due_date, invoice.payment_status)">
+                {{ invoice.due_date | date:'mediumDate' }}
               </span>
             </td>
             <td>
-              <strong>${{ invoice.total | number:'1.2-2' }}</strong>
+              <strong>₹{{ invoice.total | number:'1.2-2' }}</strong>
             </td>
             <td>
-              <span class="badge" [ngClass]="getStatusBadgeClass(invoice.paymentStatus || 'PENDING')">
-                {{ invoice.paymentStatus }}
+              <span class="badge" [ngClass]="getStatusBadgeClass(invoice.payment_status || 'PENDING')">
+                {{ invoice.payment_status }}
               </span>
             </td>
             <td>

@@ -19,9 +19,6 @@ import { Component } from '@angular/core';
               <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/clients" routerLinkActive="active">Clients</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" routerLink="/invoices" routerLinkActive="active">Invoices</a>
             </li>
           </ul>

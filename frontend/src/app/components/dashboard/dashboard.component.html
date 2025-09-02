@@ -56,7 +56,7 @@
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <div>
-            <h4 class="card-title">${{ totalRevenue | number:'1.2-2' }}</h4>
+            <h4 class="card-title">₹{{ totalRevenue | number:'1.2-2' }}</h4>
             <p class="card-text">Total Revenue</p>
           </div>
           <div class="align-self-center">
@@ -87,12 +87,12 @@
             </thead>
             <tbody>
               <tr *ngFor="let invoice of recentInvoices">
-                <td>{{ invoice.invoiceNumber }}</td>
-                <td>{{ invoice.client?.name }}</td>
-                <td>${{ invoice.total | number:'1.2-2' }}</td>
+                <td>{{ invoice.invoice_number }}</td>
+                <td>{{ invoice.customer_name }}</td>
+                <td>₹{{ invoice.total | number:'1.2-2' }}</td>
                 <td>
-                  <span class="badge" [ngClass]="getStatusBadgeClass(invoice.paymentStatus || '')">
-                    {{ invoice.paymentStatus }}
+                  <span class="badge" [ngClass]="getStatusBadgeClass(invoice.payment_status || '')">
+                    {{ invoice.payment_status }}
                   </span>
                 </td>
               </tr>
@@ -110,14 +110,8 @@
       </div>
       <div class="card-body">
         <div class="d-grid gap-2">
-          <button class="btn btn-primary" routerLink="/clients/new">
-            <i class="fas fa-user-plus"></i> Add New Client
-          </button>
           <button class="btn btn-success" routerLink="/invoices/new">
             <i class="fas fa-plus"></i> Create Invoice
-          </button>
-          <button class="btn btn-info" routerLink="/clients">
-            <i class="fas fa-users"></i> View All Clients
           </button>
           <button class="btn btn-secondary" routerLink="/invoices">
             <i class="fas fa-file-invoice"></i> View All Invoices
