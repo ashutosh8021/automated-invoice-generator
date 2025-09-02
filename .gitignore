@@ -21,6 +21,10 @@ coverage/
 .env.test.local
 .env.production.local
 
+# Environment configuration files (contains sensitive data)
+frontend/src/environments/environment.ts
+frontend/src/environments/environment.prod.ts
+
 # IDE
 .vscode/
 .idea/
