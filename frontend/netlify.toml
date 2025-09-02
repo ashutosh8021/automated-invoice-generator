@@ -1,10 +1,11 @@
 # Build configuration for Netlify
 [build]
-  command = "npm run build"
+  command = "chmod +x netlify-build.sh && ./netlify-build.sh"
   publish = "dist/invoice-frontend"
 
 [build.environment]
   NODE_VERSION = "18"
+  NPM_VERSION = "9"
 
 [[redirects]]
   from = "/*"
