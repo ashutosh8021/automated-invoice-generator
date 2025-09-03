@@ -58,3 +58,16 @@ backend/mvnw.cmd
 
 # Local environment file (create this with your actual Supabase credentials)
 environment.local.ts
+
+# Temporary documentation files
+*TEMP*
+*DRAFT*
+*BACKUP*
+*.backup
+
+# Deployment guides (keep only README.md)
+DEPLOYMENT_*.md
+SUPABASE_*.md
+COMPLETE_*.sql
+UPDATED_*.md
+SECURITY_*.md
