@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,76 +19,125 @@ export class PdfService {
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       
-      // Header
+      // Company Header
+      pdf.setFontSize(24);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(40, 116, 166); // Professional blue color
+      pdf.text(environment.companyName, pageWidth / 2, 20, { align: 'center' });
+      
+      // Company Details
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(100, 100, 100);
+      let yPos = 28;
+      
+      if (environment.companyAddress) {
+        pdf.text(environment.companyAddress, pageWidth / 2, yPos, { align: 'center' });
+        yPos += 5;
+      }
+      
+      let contactInfo = '';
+      if (environment.companyPhone) contactInfo += `Phone: ${environment.companyPhone}`;
+      if (environment.companyEmail) {
+        if (contactInfo) contactInfo += ' | ';
+        contactInfo += `Email: ${environment.companyEmail}`;
+      }
+      if (environment.companyWebsite) {
+        if (contactInfo) contactInfo += ' | ';
+        contactInfo += `Web: ${environment.companyWebsite}`;
+      }
+      
+      if (contactInfo) {
+        pdf.text(contactInfo, pageWidth / 2, yPos, { align: 'center' });
+        yPos += 8;
+      }
+      
+      // Separator line
+      pdf.setLineWidth(0.5);
+      pdf.setDrawColor(200, 200, 200);
+      pdf.line(20, yPos, pageWidth - 20, yPos);
+      yPos += 10;
+      
+      // Invoice Title
       pdf.setFontSize(20);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('INVOICE', pageWidth / 2, 25, { align: 'center' });
+      pdf.setTextColor(0, 0, 0);
+      pdf.text('INVOICE', pageWidth / 2, yPos, { align: 'center' });
+      yPos += 15;
       
       // Invoice details
       pdf.setFontSize(12);
       pdf.setFont('helvetica', 'normal');
       
       // Invoice number and date
-      pdf.text(`Invoice #: ${invoice.invoice_number}`, 20, 45);
-      pdf.text(`Date: ${new Date(invoice.created_at).toLocaleDateString()}`, 20, 55);
-      pdf.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString()}`, 20, 65);
-      pdf.text(`Status: ${invoice.payment_status?.toUpperCase()}`, 20, 75);
+      pdf.text(`Invoice #: ${invoice.invoice_number}`, 20, yPos);
+      pdf.text(`Date: ${new Date(invoice.created_at).toLocaleDateString()}`, 20, yPos + 10);
+      pdf.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString()}`, 20, yPos + 20);
+      pdf.text(`Status: ${invoice.payment_status?.toUpperCase()}`, 20, yPos + 30);
+      
+      yPos += 45;
       
       // Customer details
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Bill To:', 20, 95);
+      pdf.text('Bill To:', 20, yPos);
       pdf.setFont('helvetica', 'normal');
-      pdf.text(`${invoice.customer_name}`, 20, 105);
-      pdf.text(`${invoice.customer_email}`, 20, 115);
-      pdf.text(`${invoice.customer_phone}`, 20, 125);
+      pdf.text(`${invoice.customer_name}`, 20, yPos + 10);
+      pdf.text(`${invoice.customer_email}`, 20, yPos + 20);
+      pdf.text(`${invoice.customer_phone}`, 20, yPos + 30);
       
       if (invoice.customer_address) {
-        pdf.text(`${invoice.customer_address}`, 20, 135);
+        pdf.text(`${invoice.customer_address}`, 20, yPos + 40);
+        yPos += 50;
+      } else {
+        yPos += 40;
       }
       
+      yPos += 20;
+      
       // Items table header
-      let yPosition = 155;
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Description', 20, yPosition);
-      pdf.text('Qty', 120, yPosition);
-      pdf.text('Unit Price', 140, yPosition);
-      pdf.text('Total', 170, yPosition);
+      pdf.text('Description', 20, yPos);
+      pdf.text('Qty', 120, yPos);
+      pdf.text('Unit Price', 140, yPos);
+      pdf.text('Total', 170, yPos);
       
       // Line under header
-      pdf.line(20, yPosition + 5, pageWidth - 20, yPosition + 5);
+      pdf.line(20, yPos + 5, pageWidth - 20, yPos + 5);
       
       // Items
       pdf.setFont('helvetica', 'normal');
-      yPosition += 15;
+      yPos += 15;
       
       if (invoice.invoice_items && invoice.invoice_items.length > 0) {
         invoice.invoice_items.forEach((item: any) => {
-          pdf.text(item.description, 20, yPosition);
-          pdf.text(item.quantity.toString(), 120, yPosition);
-          pdf.text(`₹${item.unit_price.toFixed(2)}`, 140, yPosition);
-          pdf.text(`₹${(item.quantity * item.unit_price).toFixed(2)}`, 170, yPosition);
-          yPosition += 10;
+          pdf.text(item.description, 20, yPos);
+          pdf.text(item.quantity.toString(), 120, yPos);
+          pdf.text(`₹${item.unit_price.toFixed(2)}`, 140, yPos);
+          pdf.text(`₹${(item.quantity * item.unit_price).toFixed(2)}`, 170, yPos);
+          yPos += 10;
         });
       }
       
       // Totals
-      yPosition += 10;
-      pdf.line(120, yPosition, pageWidth - 20, yPosition);
-      yPosition += 10;
+      yPos += 10;
+      pdf.line(120, yPos, pageWidth - 20, yPos);
+      yPos += 10;
       
-      pdf.text(`Subtotal: ₹${invoice.subtotal?.toFixed(2) || '0.00'}`, 120, yPosition);
-      yPosition += 10;
-      pdf.text(`Tax (${invoice.tax_rate || 0}%): ₹${invoice.tax_amount?.toFixed(2) || '0.00'}`, 120, yPosition);
-      yPosition += 10;
+      pdf.text(`Subtotal: ₹${invoice.subtotal?.toFixed(2) || '0.00'}`, 120, yPos);
+      yPos += 10;
+      pdf.text(`Tax (${invoice.tax_rate || 0}%): ₹${invoice.tax_amount?.toFixed(2) || '0.00'}`, 120, yPos);
+      yPos += 10;
       
       pdf.setFont('helvetica', 'bold');
-      pdf.text(`Total: ₹${invoice.total?.toFixed(2) || '0.00'}`, 120, yPosition);
+      pdf.text(`Total: ₹${invoice.total?.toFixed(2) || '0.00'}`, 120, yPos);
       
       // Footer
-      if (yPosition < pageHeight - 50) {
+      if (yPos < pageHeight - 50) {
         pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(10);
+        pdf.setTextColor(100, 100, 100);
         pdf.text('Thank you for your business!', pageWidth / 2, pageHeight - 30, { align: 'center' });
+        pdf.text(`Generated by ${environment.companyName}`, pageWidth / 2, pageHeight - 20, { align: 'center' });
       }
       
       // Save the PDF

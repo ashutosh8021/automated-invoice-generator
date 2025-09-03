@@ -4,6 +4,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { InvoiceListComponent } from './components/invoice-list/invoice-list.component';
 import { InvoiceFormComponent } from './components/invoice-form/invoice-form.component';
 import { InvoiceViewComponent } from './components/invoice-view/invoice-view.component';
+import { CompanySettingsComponent } from './components/company-settings/company-settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -11,7 +12,8 @@ const routes: Routes = [
   { path: 'invoices', component: InvoiceListComponent },
   { path: 'invoices/new', component: InvoiceFormComponent },
   { path: 'invoices/:id/edit', component: InvoiceFormComponent },
-  { path: 'invoices/:id/view', component: InvoiceViewComponent }
+  { path: 'invoices/:id/view', component: InvoiceViewComponent },
+  { path: 'settings/company', component: CompanySettingsComponent }
 ];
 
 @NgModule({

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '../../services/invoice.service';
 import { PdfService } from '../../services/pdf.service';
 import { Invoice, PaymentStatus } from '../../models/invoice.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-invoice-view',
@@ -12,6 +13,7 @@ import { Invoice, PaymentStatus } from '../../models/invoice.model';
 export class InvoiceViewComponent implements OnInit {
   invoice?: Invoice;
   loading = true;
+  companyInfo = environment;
 
   constructor(
     private route: ActivatedRoute,

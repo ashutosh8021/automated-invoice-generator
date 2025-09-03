@@ -16,6 +16,27 @@
 </div>
 
 <div *ngIf="invoice" class="invoice-container">
+  <!-- Company Header -->
+  <div class="card mb-4">
+    <div class="card-body text-center">
+      <h2 class="text-primary mb-3">{{ companyInfo.companyName }}</h2>
+      <div class="text-muted">
+        <p class="mb-1" *ngIf="companyInfo.companyAddress">{{ companyInfo.companyAddress }}</p>
+        <div class="d-flex justify-content-center flex-wrap">
+          <span *ngIf="companyInfo.companyPhone" class="me-3">
+            <i class="fas fa-phone"></i> {{ companyInfo.companyPhone }}
+          </span>
+          <span *ngIf="companyInfo.companyEmail" class="me-3">
+            <i class="fas fa-envelope"></i> {{ companyInfo.companyEmail }}
+          </span>
+          <span *ngIf="companyInfo.companyWebsite">
+            <i class="fas fa-globe"></i> {{ companyInfo.companyWebsite }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Invoice Header -->
   <div class="card mb-4">
     <div class="card-body">

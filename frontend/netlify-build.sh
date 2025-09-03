@@ -33,6 +33,32 @@ sed -i "s|YOUR_SUPABASE_ANON_KEY|$SUPABASE_ANON_KEY|g" src/environments/environm
 sed -i "s|YOUR_SUPABASE_URL|$SUPABASE_URL|g" src/environments/environment.ts
 sed -i "s|YOUR_SUPABASE_ANON_KEY|$SUPABASE_ANON_KEY|g" src/environments/environment.ts
 
+# Replace company information if provided (optional)
+if [ ! -z "$COMPANY_NAME" ]; then
+    sed -i "s|Your Company Name|$COMPANY_NAME|g" src/environments/environment.prod.ts
+    sed -i "s|Your Company Name|$COMPANY_NAME|g" src/environments/environment.ts
+fi
+
+if [ ! -z "$COMPANY_ADDRESS" ]; then
+    sed -i "s|Your Company Address|$COMPANY_ADDRESS|g" src/environments/environment.prod.ts
+    sed -i "s|Your Company Address|$COMPANY_ADDRESS|g" src/environments/environment.ts
+fi
+
+if [ ! -z "$COMPANY_PHONE" ]; then
+    sed -i "s|Your Phone Number|$COMPANY_PHONE|g" src/environments/environment.prod.ts
+    sed -i "s|Your Phone Number|$COMPANY_PHONE|g" src/environments/environment.ts
+fi
+
+if [ ! -z "$COMPANY_EMAIL" ]; then
+    sed -i "s|your-email@company.com|$COMPANY_EMAIL|g" src/environments/environment.prod.ts
+    sed -i "s|your-email@company.com|$COMPANY_EMAIL|g" src/environments/environment.ts
+fi
+
+if [ ! -z "$COMPANY_WEBSITE" ]; then
+    sed -i "s|www.yourcompany.com|$COMPANY_WEBSITE|g" src/environments/environment.prod.ts
+    sed -i "s|www.yourcompany.com|$COMPANY_WEBSITE|g" src/environments/environment.ts
+fi
+
 echo "✅ Environment variables set"
 echo "🏗️ Building Angular application for production..."
 

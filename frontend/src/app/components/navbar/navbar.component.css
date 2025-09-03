@@ -5,3 +5,35 @@
 .nav-link.active {
   font-weight: bold;
 }
+
+.nav-link i {
+  margin-right: 0.5rem;
+  width: 16px;
+}
+
+.dropdown-item i {
+  margin-right: 0.75rem;
+  width: 16px;
+  color: #6c757d;
+}
+
+.dropdown-menu {
+  border: 1px solid #e3e6f0;
+  border-radius: 0.35rem;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fc;
+  color: #5a67d8;
+}
+
+.dropdown-item:hover i {
+  color: #5a67d8;
+}
