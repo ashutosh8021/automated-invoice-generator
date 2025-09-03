@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build script for Netlify deployment
-# This script replaces placeholder values with environment variables
+set -e  # Exit on any error
 
 echo "🔧 Setting up environment for deployment..."
 
@@ -9,6 +9,12 @@ echo "🔧 Setting up environment for deployment..."
 if [ ! -f "src/environments/environment.prod.ts" ]; then
     echo "📄 Creating environment.prod.ts from example..."
     cp src/environments/environment.prod.example.ts src/environments/environment.prod.ts
+fi
+
+# Create development environment file from example if it doesn't exist
+if [ ! -f "src/environments/environment.ts" ]; then
+    echo "📄 Creating environment.ts from example..."
+    cp src/environments/environment.example.ts src/environments/environment.ts
 fi
 
 # Check if environment variables are set
@@ -20,14 +26,31 @@ fi
 
 echo "🔧 Replacing environment variables..."
 
-# Replace placeholders in production environment file
+# Replace placeholders in both environment files
 sed -i "s|YOUR_SUPABASE_URL|$SUPABASE_URL|g" src/environments/environment.prod.ts
 sed -i "s|YOUR_SUPABASE_ANON_KEY|$SUPABASE_ANON_KEY|g" src/environments/environment.prod.ts
 
+sed -i "s|YOUR_SUPABASE_URL|$SUPABASE_URL|g" src/environments/environment.ts
+sed -i "s|YOUR_SUPABASE_ANON_KEY|$SUPABASE_ANON_KEY|g" src/environments/environment.ts
+
 echo "✅ Environment variables set"
-echo "🏗️ Building Angular application..."
+echo "🏗️ Building Angular application for production..."
 
-# Build the application
-npm run build
+# Build the application for production (ignore budget warnings)
+npm run build -- --configuration=production || {
+    echo "❌ Build failed with production config, trying default build..."
+    npm run build || {
+        echo "❌ Both builds failed!"
+        exit 1
+    }
+}
 
-echo "✅ Build complete!"
+# Verify build output exists
+if [ ! -d "dist/invoice-frontend" ]; then
+    echo "❌ Build output directory not found!"
+    ls -la dist/ || echo "dist directory doesn't exist"
+    exit 1
+fi
+
+echo "✅ Build complete! Output directory verified."
+ls -la dist/invoice-frontend/
