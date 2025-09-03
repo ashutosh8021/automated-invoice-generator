@@ -4,7 +4,7 @@
 
 ![Invoice Generator](https://img.shields.io/badge/Invoice-Generator-blue)
 ![Angular](https://img.shields.io/badge/Angular-17-red)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-green)
+![Supabase](https://img.shields.io/badge/Supabase-Backend-green)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Latest-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
@@ -105,18 +105,17 @@
 </td>
 <td>
 
-- **Spring Boot 3**
-- **Java 17**
-- **Maven**
-- **Spring Data JPA**
-- **Spring Web**
-- **CORS Support**
+- **Supabase**
+- **PostgreSQL API**
+- **Real-time Database**
+- **Row Level Security**
+- **Auto-generated REST API**
+- **Real-time Subscriptions**
 
 </td>
 <td>
 
-- **Supabase**
-- **PostgreSQL**
+- **Supabase PostgreSQL**
 - **Real-time DB**
 - **Row Level Security**
 - **Cloud Hosted**
@@ -125,9 +124,10 @@
 <td>
 
 - **Netlify** (Frontend)
-- **Railway** (Backend)
+- **Supabase** (Backend & DB)
 - **Automatic Deploys**
 - **Custom Domain**
+- **Global CDN**
 
 </td>
 </tr>
@@ -139,8 +139,7 @@
 
 ### Prerequisites
 - **Node.js** (v18 or higher) - [Download](https://nodejs.org/)
-- **Java 17** - [Download](https://adoptium.net/)
-- **Maven 3.6+** - [Download](https://maven.apache.org/)
+- **Supabase Account** - [Sign up free](https://supabase.com/)
 
 ### 🔥 Super Quick Setup (5 minutes)
 
@@ -215,19 +214,16 @@
 
 ### 🚀 Running the Application
 
-**Backend Server:**
-```bash
-cd backend
-mvn clean install
-mvn spring-boot:run
-```
-
-**Frontend Server:**
+**Frontend Development Server:**
 ```bash
 cd frontend
 npm install
 npm start
 ```
+
+**Access Application:**
+- Frontend: `http://localhost:4200`
+- Backend: Supabase handles all API endpoints automatically
 
 **Access Application:**
 - Frontend: `http://localhost:4200`
@@ -301,16 +297,7 @@ automated-invoice-generator/
 │   │   └── 📄 styles.css          # Global Styles
 │   ├── 📄 package.json
 │   └── 📄 angular.json
-├── 📁 backend/                     # Spring Boot API
-│   └── 📁 src/main/
-│       ├── 📁 java/com/invoiceapp/
-│       │   ├── 📁 controller/      # REST Controllers
-│       │   ├── 📁 service/         # Business Logic
-│       │   ├── 📁 entity/          # JPA Entities
-│       │   ├── 📁 repository/      # Data Access
-│       │   └── 📁 config/          # Configuration
-│       └── 📁 resources/
-├── 📄 FRESH_SUPABASE_SCHEMA.sql   # Database Schema
+├──  FRESH_SUPABASE_SCHEMA.sql   # Database Schema
 └── 📄 README.md                   # Documentation
 ```
 
@@ -375,18 +362,16 @@ automated-invoice-generator/
    - Build command: `npm run build`
    - Publish directory: `dist/invoice-frontend`
 
-### 🖥️ **Backend (Railway/Heroku)**
+### �️ **Backend (Supabase)**
+- **No deployment needed!** Supabase handles everything
+- **Automatic scaling** based on usage
+- **Global CDN** for fast API responses
+- **Built-in monitoring** and analytics
 
-1. **Prepare for Deployment**
-   ```bash
-   cd backend
-   mvn clean package
-   ```
-
-2. **Deploy**
-   - Connect repository to hosting platform
-   - Set Java 17 runtime
-   - Configure environment variables
+### 🔗 **Live Application**
+- **Frontend**: [https://automated-invoice-generator80.netlify.app/](https://automated-invoice-generator80.netlify.app/)
+- **Backend**: Powered by Supabase (automatic endpoints)
+- **Database**: Supabase PostgreSQL (cloud-hosted)
 
 ### 🔗 **Live Links**
 - **Frontend**: [https://automated-invoice-generator80.netlify.app/](https://automated-invoice-generator80.netlify.app/)
@@ -469,16 +454,17 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### 🙏 **Built With Love Using:**
 - **Angular Team** - Amazing frontend framework
-- **Spring Boot** - Powerful backend framework
-- **Supabase** - Excellent database platform
+- **Supabase** - Incredible backend-as-a-service platform
 - **Bootstrap** - Beautiful UI components
 - **Font Awesome** - Great icons
 - **jsPDF** - PDF generation library
+- **Netlify** - Excellent frontend hosting
 
 ### 🌟 **Special Thanks To:**
 - Open source community
 - All contributors
 - Users providing feedback
+- Supabase team for the amazing platform
 
 ---
 
